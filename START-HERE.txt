@@ -1,0 +1,31 @@
+AEI - COMPLETE FINAL PROJECT
+
+This ZIP contains the complete updated mobile app, original data-science/backend project, optional browser demo, database schema and documentation. You do not need to combine it with any previous ZIP.
+
+RUN THE MOBILE APP
+1. Extract this ZIP into a NEW folder.
+2. Open the AEI folder, then the mobile folder.
+3. Open PowerShell or a VS Code terminal in that mobile folder.
+4. Run:
+
+   npm ci
+   npx expo start --clear
+
+5. Scan the QR code using Expo Go compatible with this project's Expo SDK 53.
+6. Allow location permission.
+7. Tap USE CURRENT LOCATION, then FIND SAFE SHELTER.
+
+No Python backend is required for local mobile demo routing.
+
+DEMONSTRATE REROUTING
+Choose a shelter, start navigation, then use DEMO: BLOCK ROAD AHEAD or DEMO: SHELTER UNREACHABLE.
+
+OFFLINE DEMO
+Save the offline routing package and enable Offline schematic map. Keep the app loaded when testing through Expo Go. A standalone native build is needed for reliable startup without Metro. Full offline basemap downloads are not included.
+
+MORE HELP
+RUN-MOBILE.md: detailed phone setup and optional server synchronization.
+VALIDATION-MOBILE.md: completed checks and remaining device testing.
+ARCHITECTURE.md: system architecture and implementation scope.
+
+All hazards, road overlays and shelters in the demo are simulated training data. Physical phone testing and a signed APK/IPA build have not been completed. This ZIP contains source code, not an installable APK.

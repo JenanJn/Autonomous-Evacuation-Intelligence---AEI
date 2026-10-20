@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "AEI Evacuation",
+    "slug": "aei-evacuation",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a2a4a"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.aei.evacuation",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "AEI needs your location to calculate an evacuation route from your current position.",
+        "NSLocationAlwaysUsageDescription": "AEI needs your location to calculate evacuation routes."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1a2a4a"
+      },
+      "package": "com.aei.evacuation",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "AEI needs your location to calculate evacuation routes."
+        }
+      ]
+    ],
+    "experiments": {}
+  }
+}
