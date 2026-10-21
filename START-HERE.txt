@@ -8,14 +8,14 @@ EASIEST WAY TO RUN ON WINDOWS
 3. Double-click RUN-MOBILE.cmd.
 4. Let dependency installation finish if this is the first launch.
 5. Keep laptop and phone on the same Wi-Fi.
-6. Scan the new QR code with Expo Go for SDK 53 (Android).
+6. Scan the new QR code with Expo Go for SDK 57 (Android).
 
-Node.js 20 or later is required. The launcher detects the laptop Wi-Fi IPv4 address and uses it for the QR code, rather than 127.0.0.1. If Windows asks, allow Node.js on your trusted Private network. It does not change firewall or persistent system settings itself.
+Node.js 24 LTS is required. The launcher detects the laptop Wi-Fi IPv4 address and uses it for the QR code, rather than 127.0.0.1. If Windows asks, allow Node.js on your trusted Private network. It does not change firewall or persistent system settings itself.
 
-ALREADY HAVE EXPO GO FOR SDK 53?
-Keep it. This release remains SDK 53 and includes the SDK 53 package compatibility updates.
-Official SDK 53 Android download:
-https://expo.dev/go?sdkVersion=53&platform=android&device=true
+EXPO GO VERSION
+This release uses Expo SDK 57. Keep the SDK 57 Expo Go already on your phone.
+If you installed an older SDK 53 Expo Go, install the SDK 57 version instead.
+Official download: https://expo.dev/go?sdkVersion=57&platform=android&device=true
 
 MANUAL METHOD
 Open PowerShell in AEI/mobile:

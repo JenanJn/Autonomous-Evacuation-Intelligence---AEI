@@ -1,6 +1,6 @@
 # Run the redesigned mobile app
 
-Extract the complete ZIP into a new folder. On Windows, open AEI and double-click **RUN-MOBILE.cmd**. It installs dependencies if required, detects the laptop Wi-Fi address, chooses a free development port and launches Expo with that address in the QR code. It makes no persistent network/firewall changes. Node.js 20+ and compatible Expo Go are required.
+Extract the complete ZIP into a new folder. On Windows, open AEI and double-click **RUN-MOBILE.cmd**. It installs dependencies if required, detects the laptop Wi-Fi address, chooses a free development port and launches Expo with that address in the QR code. It makes no persistent network/firewall changes. Node.js 24 LTS and compatible Expo Go are required.
 
 Manual alternative, from AEI/mobile:
 
@@ -9,7 +9,7 @@ npm ci
 node scripts/start-phone.cjs
 ```
 
-Keep the phone and laptop on the same Wi-Fi. Keep the terminal open. If Windows asks, allow Node.js on your trusted Private network. This project stays on Expo SDK 53 and includes the SDK 53 compatibility updates you applied earlier. Use [Expo Go for SDK 53 on Android](https://expo.dev/go?sdkVersion=53&platform=android&device=true), not the SDK 57 Expo Go version. Native store/development builds need their map provider's Android/iOS credentials and configuration.
+Keep the phone and laptop on the same Wi-Fi. Keep the terminal open. If Windows asks, allow Node.js on your trusted Private network. This project now uses Expo SDK 57. Keep the SDK 57 Expo Go already on your phone. If needed, get the matching version from the [official Expo Go download page](https://expo.dev/go?sdkVersion=57&platform=android&device=true). Native store/development builds need their map provider's Android/iOS credentials and configuration.
 
 ## Use and demonstrate
 

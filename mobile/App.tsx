@@ -15,7 +15,7 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 export default function App() {
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" backgroundColor="#ffffff" />
+      <StatusBar style="dark" />
       <AppNavigator />
     </SafeAreaProvider>
   );

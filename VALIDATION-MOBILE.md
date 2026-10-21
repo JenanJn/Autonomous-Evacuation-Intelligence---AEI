@@ -1,3 +1,19 @@
+# Expo SDK 57 upgrade verification — 21 October 2026
+
+- Expo 57.0.30, React Native 0.86.3 and React 19.2.3; matching Expo native modules and map library.
+- Clean dependency installation and offline Expo package version check: PASS.
+- TypeScript 6 project check: PASS. Replaced the removed StyleSheet.absoluteFillObject API with absoluteFill.
+- Routing, five-disaster presentation and Wi-Fi launcher tests: PASS.
+- Android Metro export: PASS, 940 modules, 18 assets, approximately 1.5 MB JavaScript.
+- Hermes compilation of the SDK 57 Android bundle: PASS (2,269,876-byte test bytecode output, excluded from source).
+- Local Expo configuration resolves with sdkVersion 57.0.0.
+- Expo Doctor: 20/21 checks passed. The online app.json schema check could not connect to the Expo API (TLS connection failure); it is not recorded as a pass.
+- Physical-phone installation, GPS and native SQLite runtime have not been verified in this upgrade session.
+
+The launcher installs dependencies when the installed Expo version is not SDK 57 and clears Metro's cache. Use Node.js 24 LTS and Expo Go for SDK 57.
+
+## Earlier SDK 53 redesign validation (historical)
+
 # Mobile redesign verification — 21 October 2026
 
 Completed:
