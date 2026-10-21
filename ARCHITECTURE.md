@@ -1,3 +1,7 @@
+# Evacuation UI redesign update
+
+The current native screen delegates state and navigation behavior to `mobile/src/evacuation/useEvacuation.ts`; disaster-specific visual metadata is in `presentation.ts`; native map overlays, shared UI primitives and a separate training studio live under `ui/`. A `.web.tsx` map adapter and `.web.ts` storage adapter allow browser QA of the shared mobile UI without replacing the native maps/SQLite implementation. The citizen screen uses task phases: overview, choose, preview, navigate, arrived and unavailable. Connection and save status are explicit. Full offline basemaps and background navigation remain outside the prototype. **UX-REDESIGN.md** supersedes the older UI descriptions below.
+
 # Mobile implementation update
 
 The native Expo client now implements the map, shelter review, route preview, foreground GPS guidance, rerouting, alternative shelters, arrival detection, SOS share sheet and training operations controls in EvacuationMapScreen.tsx. expo-sqlite persists the regional JSON graph locally. react-native-maps renders georeferenced overlays on the native basemap or in schematic mode. Optional authenticated publication/polling uses the training server. This supersedes earlier descriptions below that scoped working navigation to the browser. Native offline basemap downloads and background GPS remain unimplemented.

@@ -1,3 +1,7 @@
+# Redesigned mobile release
+
+Start with **START-HERE.txt**. On Windows, double-click **RUN-MOBILE.cmd**. The complete project now contains the redesigned native evacuation map with distinct disaster zones and a simpler step-by-step flow. See **UX-REDESIGN.md** and **VALIDATION-MOBILE.md** for the current screen design and checks. Older browser-demo instructions below are optional companion material.
+
 # Mobile update
 
 The Expo app now opens on a native evacuation map with SQLite offline routing, GPS navigation and training operations controls. Start with **RUN-MOBILE.md** for the current mobile instructions. The browser implementation below remains an optional companion.

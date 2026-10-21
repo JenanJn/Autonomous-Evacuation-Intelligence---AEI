@@ -1,31 +1,51 @@
-AEI - COMPLETE FINAL PROJECT
+AEI - COMPLETE MOBILE REDESIGN
 
-This ZIP contains the complete updated mobile app, original data-science/backend project, optional browser demo, database schema and documentation. You do not need to combine it with any previous ZIP.
+Everything is included. You do not need earlier ZIP files.
 
-RUN THE MOBILE APP
-1. Extract this ZIP into a NEW folder.
-2. Open the AEI folder, then the mobile folder.
-3. Open PowerShell or a VS Code terminal in that mobile folder.
-4. Run:
+EASIEST WAY TO RUN ON WINDOWS
+1. Extract the complete ZIP into a NEW folder.
+2. Open the AEI folder.
+3. Double-click RUN-MOBILE.cmd.
+4. Let dependency installation finish if this is the first launch.
+5. Keep laptop and phone on the same Wi-Fi.
+6. Scan the new QR code with Expo Go for SDK 53 (Android).
 
-   npm ci
-   npx expo start --clear
+Node.js 20 or later is required. The launcher detects the laptop Wi-Fi IPv4 address and uses it for the QR code, rather than 127.0.0.1. If Windows asks, allow Node.js on your trusted Private network. It does not change firewall or persistent system settings itself.
 
-5. Scan the QR code using Expo Go compatible with this project's Expo SDK 53.
-6. Allow location permission.
-7. Tap USE CURRENT LOCATION, then FIND SAFE SHELTER.
+ALREADY HAVE EXPO GO FOR SDK 53?
+Keep it. This release remains SDK 53 and includes the SDK 53 package compatibility updates.
+Official SDK 53 Android download:
+https://expo.dev/go?sdkVersion=53&platform=android&device=true
 
-No Python backend is required for local mobile demo routing.
+MANUAL METHOD
+Open PowerShell in AEI/mobile:
+  npm ci
+  node scripts/start-phone.cjs
+
+USE THE APP
+Tap Use my current location, then Find safe shelter.
+Choose a shelter, View this route, then Start navigation.
+SOS is always at the top. Map key and offline readiness are in the menu.
+
+CHANGE THE DEMO DISASTER
+Menu (top-right) -> Training studio -> Flood / Fire / Cyclone / Earthquake / Landslide -> Close.
+Return to the map to see water or flames, or the relevant disaster symbols.
 
 DEMONSTRATE REROUTING
-Choose a shelter, start navigation, then use DEMO: BLOCK ROAD AHEAD or DEMO: SHELTER UNREACHABLE.
+Start navigation first. Then Menu -> Training studio -> Block the road ahead.
+For shelter fallback, choose Make this shelter unreachable instead.
+Training actions automatically return to the map. Demo walking can advance one road for the presentation.
 
-OFFLINE DEMO
-Save the offline routing package and enable Offline schematic map. Keep the app loaded when testing through Expo Go. A standalone native build is needed for reliable startup without Metro. Full offline basemap downloads are not included.
+OFFLINE
+Menu -> Offline readiness -> Save route data now.
+Use the schematic map when the street basemap is unavailable.
+Full offline street-map downloads are NOT included.
+Expo Go normally needs Metro for a cold start. A standalone native build is needed to launch independently from the development computer.
 
-MORE HELP
-RUN-MOBILE.md: detailed phone setup and optional server synchronization.
-VALIDATION-MOBILE.md: completed checks and remaining device testing.
-ARCHITECTURE.md: system architecture and implementation scope.
+IMPORTANT
+All hazards, road overlays, shelters and medical facilities are simulated training data. No official disaster feed or emergency dispatch is connected. This is source code, not an APK. Native phone/field testing is still needed.
 
-All hazards, road overlays and shelters in the demo are simulated training data. Physical phone testing and a signed APK/IPA build have not been completed. This ZIP contains source code, not an installable APK.
+MORE DETAILS
+RUN-MOBILE.md: setup and optional server synchronization.
+UX-REDESIGN.md: screen design, implemented improvements and government-deployment roadmap.
+VALIDATION-MOBILE.md: test evidence and verification limits.
