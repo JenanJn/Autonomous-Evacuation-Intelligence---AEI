@@ -1,51 +1,35 @@
-AEI - COMPLETE MOBILE REDESIGN
+AEI - COMPLETE LOCATION-INDEPENDENT MOBILE UPDATE
 
-Everything is included. You do not need earlier ZIP files.
+This is your existing project, enhanced. Home is restored.
+Current Location / Choose on Map / Demo Mode -> select disaster -> prepare location -> choose shelter -> navigate.
 
-EASIEST WAY TO RUN ON WINDOWS
-1. Extract the complete ZIP into a NEW folder.
-2. Open the AEI folder.
-3. Double-click RUN-MOBILE.cmd.
-4. Let dependency installation finish if this is the first launch.
-5. Keep laptop and phone on the same Wi-Fi.
-6. Scan the new QR code with Expo Go for SDK 57 (Android).
+RUN ON A PHONE
+1. Stop older Expo terminals with Ctrl+C.
+2. Open AEI and double-click RUN-MOBILE.cmd.
+3. Let missing dependencies install. Keep phone and computer on the same Wi-Fi.
+4. Scan the QR code using Expo Go compatible with SDK 53.
+This release stays on SDK 53. SDK 57 Expo Go cannot open SDK 53 projects.
+For an APK independent of Expo Go, follow README-LOCATION-INDEPENDENT.md.
 
-Node.js 24 LTS is required. The launcher detects the laptop Wi-Fi IPv4 address and uses it for the QR code, rather than 127.0.0.1. If Windows asks, allow Node.js on your trusted Private network. It does not change firewall or persistent system settings itself.
-
-EXPO GO VERSION
-This release uses Expo SDK 57. Keep the SDK 57 Expo Go already on your phone.
-If you installed an older SDK 53 Expo Go, install the SDK 57 version instead.
-Official download: https://expo.dev/go?sdkVersion=57&platform=android&device=true
-
-MANUAL METHOD
-Open PowerShell in AEI/mobile:
-  npm ci
-  node scripts/start-phone.cjs
-
-USE THE APP
-Tap Use my current location, then Find safe shelter.
-Choose a shelter, View this route, then Start navigation.
-SOS is always at the top. Map key and offline readiness are in the menu.
-
-CHANGE THE DEMO DISASTER
-Menu (top-right) -> Training studio -> Flood / Fire / Cyclone / Earthquake / Landslide -> Close.
-Return to the map to see water or flames, or the relevant disaster symbols.
-
-DEMONSTRATE REROUTING
-Start navigation first. Then Menu -> Training studio -> Block the road ahead.
-For shelter fallback, choose Make this shelter unreachable instead.
-Training actions automatically return to the map. Demo walking can advance one road for the presentation.
+DEMONSTRATE
+Choose any location with mapped public roads; no fixed city or campus is required.
+Internet is needed to prepare a new area. Public road services can be slow or unavailable.
+Choose Flood, Fire, Cyclone, Earthquake or Landslide before preparing.
+Start navigation, then Trigger Blockage Ahead to show automatic recalculation.
+Demo walk advances along the actual route. Fill shelter demonstrates destination fallback.
+Training studio has check-ins, hazard expansion and optional server publishing.
+View surroundings opens external Google Maps imagery where available.
 
 OFFLINE
-Menu -> Offline readiness -> Save route data now.
-Use the schematic map when the street basemap is unavailable.
-Full offline street-map downloads are NOT included.
-Expo Go normally needs Metro for a cold start. A standalone native build is needed to launch independently from the development computer.
+The last downloaded area's actual street vectors, graph, hazards and shelters are saved locally.
+Detailed online tiles and street imagery require connectivity. No standard OSM tile bulk-download is used.
+New locations outside the saved area need a new download. An installed APK is needed for an independent cold start.
 
-IMPORTANT
-All hazards, road overlays, shelters and medical facilities are simulated training data. No official disaster feed or emergency dispatch is connected. This is source code, not an APK. Native phone/field testing is still needed.
+OPERATIONS
+Optional server: python demo/server.py
+Dashboard: http://localhost:8080/operations.html
+See README-LOCATION-INDEPENDENT.md for LAN setup, authentication, publish-first flow and APK instructions.
 
-MORE DETAILS
-RUN-MOBILE.md: setup and optional server synchronization.
-UX-REDESIGN.md: screen design, implemented improvements and government-deployment roadmap.
-VALIDATION-MOBILE.md: test evidence and verification limits.
+All disaster events and shelter occupancy are simulated. Real push/SMS providers and official shelter data are not connected.
+Live road-service access and physical-device GPS, audio, SQLite and APK operation still need testing on your network/phone.
+No new changes were committed or pushed in this implementation session.

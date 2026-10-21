@@ -1,32 +1,25 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { disasterVisual, hazardTexturePoints } from '../presentation';
-import type { Point } from '../engine';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { MAP_DOCUMENT, mapSnapshot } from './mapDocument';
 import type { MapHandle, MapProps } from './mapTypes';
-function world(p:Point,zoom:number){const size=256*2**zoom,latitude=Math.max(-85,Math.min(85,p.lat))*Math.PI/180;return {x:(p.lon+180)/360*size,y:(1-Math.log(Math.tan(latitude)+1/Math.cos(latitude))/Math.PI)/2*size};}
-function inverse(x:number,y:number,zoom:number){const size=256*2**zoom;return {lon:x/size*360-180,lat:Math.atan(Math.sinh(Math.PI*(1-2*y/size)))*180/Math.PI};}
-export const EvacuationMap=forwardRef<MapHandle,MapProps>(function EvacuationMap(p,ref){
- const host=useRef<HTMLDivElement>(null),[size,setSize]=useState({width:390,height:700}),[camera,setCamera]=useState({point:p.position,zoom:15.2});
- const drag=useRef<{x:number;y:number;point:Point}|null>(null),propsRef=useRef(p);propsRef.current=p;
- function fit(points:Point[]){if(!points.length)return;const coordinates=points.map(point=>world(point,0));const xs=coordinates.map(v=>v.x),ys=coordinates.map(v=>v.y);const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);const top=p.navigating?210:175,bottom=p.bottomSpace+25;const availableHeight=Math.max(100,size.height-top-bottom);const zoom=Math.min(17,Math.max(12,Math.log2(Math.min(Math.max(120,size.width-176)/Math.max(.00001,maxX-minX),availableHeight/Math.max(.00001,maxY-minY)))));const targetY=(minY+maxY)/2*2**zoom;const visibleCenter=top+availableHeight/2;setCamera({point:inverse((minX+maxX)/2*2**zoom,targetY+(size.height/2-visibleCenter),zoom),zoom});}
- function overview(){const current=propsRef.current;fit([current.position,...current.area.shelters,...current.area.hazards.filter(h=>h.active).map(h=>({...h,lat:h.lat+h.radius/111320}))]);}
- useImperativeHandle(ref,()=>({focus:(point=p.position)=>fit([point,...p.area.shelters.slice(0,1)]),overview}));
- useEffect(()=>{if(!host.current)return;const observer=new ResizeObserver(entries=>{const box=entries[0].contentRect;setSize({width:box.width,height:box.height});});observer.observe(host.current);return()=>observer.disconnect();},[]);
- useEffect(()=>{if(p.route&&p.focusRoute)fit([p.position,...p.area.hazards.filter(h=>h.active).map(h=>({...h,lat:h.lat+h.radius/111320})),...p.route.path.map(id=>p.area.nodes.find(n=>n.id===id)!)]);else overview();},[p.area.origin.lat,p.area.origin.lon,p.selectedId,p.route?.path.join('|'),size.width,size.height,p.navigating,p.focusRoute,p.bottomSpace]);
- const center=world(camera.point,camera.zoom),project=(point:Point)=>{const w=world(point,camera.zoom);return {x:w.x-center.x+size.width/2,y:w.y-center.y+size.height/2};};
- const tileZoom=Math.floor(camera.zoom),scale=2**(camera.zoom-tileZoom),tileWidth=256*scale,left=center.x-size.width/2,top=center.y-size.height/2;
- const tiles:React.ReactNode[]=[];
- if(!p.schematic)for(let x=Math.floor(left/tileWidth);x<=Math.floor((left+size.width)/tileWidth);x++)for(let y=Math.floor(top/tileWidth);y<=Math.floor((top+size.height)/tileWidth);y++)tiles.push(<img key={`${tileZoom}/${x}/${y}`} draggable={false} alt="" src={`https://tile.openstreetmap.org/${tileZoom}/${x}/${y}.png`} onError={e=>{e.currentTarget.style.opacity='0';}} style={{position:'absolute',left:x*tileWidth-left,top:y*tileWidth-top,width:tileWidth+.5,height:tileWidth+.5,filter:'saturate(.5) contrast(.9) brightness(1.04)'}}/>);
- return <div ref={host} role="region" aria-label="Evacuation map with disaster zones and shelter markers" style={{position:'absolute',inset:0,overflow:'hidden',background:'#e6eee8',touchAction:'none'}} onPointerDown={e=>{if((e.target as Element).closest('[data-map-action]'))return;drag.current={x:e.clientX,y:e.clientY,point:camera.point};}} onPointerUp={e=>{if(!drag.current)return;const start=world(drag.current.point,camera.zoom);setCamera({...camera,point:inverse(start.x-(e.clientX-drag.current.x),start.y-(e.clientY-drag.current.y),camera.zoom)});drag.current=null;}} onDoubleClick={e=>{if(p.navigating)return;const r=e.currentTarget.getBoundingClientRect();p.onManual(inverse(center.x+e.clientX-r.left-size.width/2,center.y+e.clientY-r.top-size.height/2,camera.zoom));}}>
- {tiles}<svg width="100%" height="100%" style={{position:'absolute',inset:0}} aria-hidden="true">
- {p.area.roads.map(r=>{const a=project(p.area.nodes.find(n=>n.id===r.u)!),b=project(p.area.nodes.find(n=>n.id===r.v)!);return <line key={r.id} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={r.status==='BLOCKED'?'#c33b30':'#94aaa2'} strokeWidth={r.status==='BLOCKED'?5:2} strokeDasharray={r.status==='BLOCKED'?'7 5':undefined}/>;})}
- {p.area.hazards.filter(h=>h.active).map(h=>{const v=disasterVisual(h.type),a=project(h),radius=h.radius/(156543.03*Math.cos(h.lat*Math.PI/180)/2**camera.zoom);return <g key={h.id}><circle cx={a.x} cy={a.y} r={radius+5} fill="none" stroke={v.color+'60'}/><circle cx={a.x} cy={a.y} r={radius} fill={v.fill} stroke={v.color} strokeWidth="2"/>{hazardTexturePoints(h).map((q,i)=>{const pos=project(q);return <text key={i} x={pos.x} y={pos.y} fill={v.color} textAnchor="middle" dominantBaseline="middle" fontSize={h.type==='Flood'?34:23} fontWeight="bold">{v.texture}</text>;})}</g>;})}
- {p.route&&<><polyline points={p.route.path.map(id=>{const v=project(p.area.nodes.find(n=>n.id===id)!);return `${v.x},${v.y}`;}).join(' ')} fill="none" stroke="white" strokeWidth="11" strokeLinejoin="round"/><polyline points={p.route.path.map(id=>{const v=project(p.area.nodes.find(n=>n.id===id)!);return `${v.x},${v.y}`;}).join(' ')} fill="none" stroke="#087457" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/></>}
- {p.area.roads.filter(r=>r.status==='BLOCKED').map(r=>{const a=p.area.nodes.find(n=>n.id===r.u)!,b=p.area.nodes.find(n=>n.id===r.v)!,v=project({lat:(a.lat+b.lat)/2,lon:(a.lon+b.lon)/2});return <g key={'block'+r.id}><circle cx={v.x} cy={v.y} r="12" fill="#bc3026" stroke="white" strokeWidth="2"/><text x={v.x} y={v.y+6} textAnchor="middle" fill="white" fontSize="24">×</text></g>;})}
- </svg>
- {p.area.hazards.filter(h=>h.active).map(h=>{const v=disasterVisual(h.type),a=project({...h,lat:h.lat+h.radius/111320});return <button data-map-action key={'hazard'+h.id} aria-label={v.zone} onClick={p.onHazard} style={{position:'absolute',left:a.x,top:a.y,transform:'translate(-50%,-100%)',background:v.background,border:`1px solid ${v.color}`,borderRadius:9,padding:'6px 9px',color:v.color,fontSize:10,fontWeight:850,cursor:'pointer',whiteSpace:'nowrap'}}><span style={{fontSize:21,verticalAlign:'middle',marginRight:4}}>{v.icon}</span>{v.zone}</button>;})}
- {p.area.facilities.map(f=>{const a=project(f);return <span key={f.name} style={{position:'absolute',left:a.x,top:a.y,background:'white',borderRadius:7,padding:'0 7px',fontSize:24,color:'#628d9d'}}>+</span>;})}
- {p.area.shelters.map((s,i)=>{const a=project(s),selected=s.id===p.selectedId,open=s.status==='OPEN'&&s.available>0;return <button data-map-action key={s.id} onClick={()=>p.onShelter(s.id)} aria-label={s.name+' shelter marker'} style={{position:'absolute',left:a.x,top:a.y,transform:'translate(-50%,-50%)',border:0,background:'transparent',cursor:'pointer',padding:3,display:'flex',flexDirection:'column',alignItems:'center'}}><span style={{display:'block',border:`2px solid ${open?'#087457':'#c33b30'}`,borderRadius:14,minWidth:48,padding:'5px 8px',background:selected&&open?'#087457':'white',color:open?selected?'white':'#087457':'#c33b30',fontSize:19,fontWeight:800}}>⌂ {i+1}</span>{!p.compact&&<span style={{fontSize:10,color:'#25473d',fontWeight:700,background:'#fffffff0',padding:3,borderRadius:3,marginTop:2,whiteSpace:'nowrap'}}>{s.name}</span>}</button>;})}
- {(()=>{const a=project(p.position);return <div aria-label={p.positionLabel} style={{position:'absolute',left:a.x-19,top:a.y-19,borderRadius:30,width:38,height:38,background:'#227de633',display:'grid',placeItems:'center',pointerEvents:'none'}}><span style={{width:18,height:18,borderRadius:'50%',background:'#237ce0',border:'3px solid white'}}/></div>;})()}
- <a href="https://www.openstreetmap.org/copyright" style={{position:'absolute',bottom:p.bottomSpace+3,right:4,fontSize:9,color:'#3c5048',background:'#ffffffdd',padding:'1px 3px'}}>© OpenStreetMap contributors</a>
- </div>;
+import type { Point } from '../engine';
+
+/** Browser QA uses exactly the bundled document used by the native WebView. */
+export const EvacuationMap=forwardRef<MapHandle,MapProps>(function EvacuationMap(props,ref){
+ const frame=useRef<HTMLIFrameElement>(null),latest=useRef(props),ready=useRef(false);
+ latest.current=props;
+ function send(type:string,point?:Point){if(ready.current)frame.current?.contentWindow?.postMessage({aeiCommand:true,type,payload:type==='update'?mapSnapshot(latest.current):undefined,point},'*');}
+ useImperativeHandle(ref,()=>({focus:(point)=>send('focus',point),overview:()=>send('overview')}),[]);
+ useEffect(()=>{send('update');},[props]);
+ useEffect(()=>{
+  function receive(e:MessageEvent){if(e.source!==frame.current?.contentWindow||!e.data?.aeiMap)return;const m=e.data;
+   if(m.type==='ready'){ready.current=true;send('update');}
+   else if(m.type==='shelter'&&latest.current.area.shelters.some(s=>s.id===m.id))latest.current.onShelter(m.id);
+   else if(m.type==='hazard')latest.current.onHazard();
+   else if(m.type==='pan')latest.current.onPan?.();
+   else if(m.type==='manual'&&!latest.current.navigating&&Number.isFinite(m.point?.lat)&&Number.isFinite(m.point?.lon))latest.current.onManual(m.point);
+   else if(m.type==='license')window.open('https://www.openstreetmap.org/copyright','_blank','noopener,noreferrer');
+  }
+  window.addEventListener('message',receive);return()=>window.removeEventListener('message',receive);
+ },[]);
+ return <iframe ref={frame} srcDoc={MAP_DOCUMENT} sandbox="allow-scripts" onLoad={()=>{ready.current=true;send('update');}} title="OpenStreetMap evacuation map" style={{position:'absolute',inset:0,width:'100%',height:'100%',border:0,background:'#e6eee8'}}/>;
 });

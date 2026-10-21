@@ -1,3 +1,11 @@
+# Current mobile implementation — location-independent update
+
+Home is the entry screen, followed by disaster/location setup and the shared evacuation session. The runtime downloads actual OpenStreetMap road geometry for the user-selected position; it does not create the legacy grid. Leaflet is bundled in the mobile WebView, with downloaded street vectors for offline display. The project remains on SDK 53. A native MapLibre migration was not included.
+
+See README-LOCATION-INDEPENDENT.md for the current flow, shared operations, build instructions, test limits and implemented versus simulated features. The optional current operations console is `/operations.html`. The older standalone browser demo and its synthetic scenario are retained as legacy material.
+
+## Earlier documentation (historical context)
+
 # Redesigned mobile release
 
 Start with **START-HERE.txt**. On Windows, double-click **RUN-MOBILE.cmd**. The complete project now contains the redesigned native evacuation map with distinct disaster zones and a simpler step-by-step flow. See **UX-REDESIGN.md** and **VALIDATION-MOBILE.md** for the current screen design and checks. Older browser-demo instructions below are optional companion material.

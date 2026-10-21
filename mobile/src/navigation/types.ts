@@ -10,7 +10,8 @@ import type { EvacuationPlan, UserLocation } from '../types/api';
 export type RootStackParamList = {
   Home: undefined;
   EvacuationMap: undefined;
-  LocationSelection: undefined;
+  DemoSetup: {startMode?:'gps'|'map'};
+  LocationSelection: {disaster?:import('../evacuation/presentation').DisasterType} | undefined;
   EvacuationPlan: {
     location: UserLocation;
     demoMode: boolean;

@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Colors } from '../theme/colors';
 import { EvacuationMapScreen } from '../screens/EvacuationMapScreen';
+import { DemoSetupScreen } from '../screens/DemoSetupScreen';
 import { HomeScreen } from '../screens/HomeScreen';
 import { LocationSelectionScreen } from '../screens/LocationSelectionScreen';
 import { EvacuationPlanScreen } from '../screens/EvacuationPlanScreen';
@@ -25,7 +26,7 @@ export function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="EvacuationMap"
+        initialRouteName="Home"
         screenOptions={{
           headerStyle: { backgroundColor: Colors.primary },
           headerTintColor: Colors.textOnDark,
@@ -34,6 +35,7 @@ export function AppNavigator() {
           animation: 'slide_from_right',
         }}
       >
+        <Stack.Screen name="DemoSetup" component={DemoSetupScreen} options={{title:"Set up your demo"}} />
         <Stack.Screen name="EvacuationMap" component={EvacuationMapScreen} options={{headerShown:false}} />
         <Stack.Screen
           name="Home"

@@ -6,6 +6,12 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f5f8f6"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.aei.evacuation",
@@ -37,16 +43,7 @@
           "locationAlwaysAndWhenInUsePermission": "AEI needs your location to calculate evacuation routes."
         }
       ],
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/splash-icon.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#f5f8f6"
-        }
-      ],
-      "expo-font",
-      "expo-sqlite"
+      "./plugins/withTrainingNetwork"
     ],
     "experiments": {}
   }

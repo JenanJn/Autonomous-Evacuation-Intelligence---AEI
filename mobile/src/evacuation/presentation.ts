@@ -18,20 +18,7 @@ export function hazardTexturePoints(hazard: Hazard): Point[] {
     lon: hazard.lon + x * hazard.radius / (111320 * factor),
   }));
 }
-export function routeGuidance(area: Area, route: Route | null) {
-  if (!route || route.path.length < 2) return { symbol: '✓', instruction: 'Shelter is ahead', next: 'Check your surroundings before continuing.' };
-  const points = route.path.map(id => area.nodes.find(n => n.id === id)!);
-  const [a, b, c] = points;
-  const direction = Math.abs(b.lat - a.lat) > Math.abs(b.lon - a.lon)
-    ? b.lat > a.lat ? 'north' : 'south'
-    : b.lon > a.lon ? 'east' : 'west';
-  let next = 'Continue toward the shelter.';
-  if (c) {
-    const cross = (b.lon - a.lon) * (c.lat - b.lat) - (b.lat - a.lat) * (c.lon - b.lon);
-    next = cross > 0 ? 'Then turn left' : cross < 0 ? 'Then turn right' : 'Then continue straight';
-  }
-  return { symbol: '↑', instruction: `Head ${direction} for ${Math.round(Math.hypot((b.lat-a.lat)*111320, (b.lon-a.lon)*111320*Math.cos(a.lat*Math.PI/180)) / 10) * 10} m`, next };
-}
+export { guidance as routeGuidance } from './engine';
 export function routeSummary(area: Area) {
   const zones = area.hazards.filter(h => h.active).length;
   const closed = area.roads.filter(r => r.status === 'BLOCKED').length;

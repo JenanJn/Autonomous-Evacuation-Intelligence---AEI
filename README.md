@@ -1,3 +1,7 @@
+# AEI mobile evacuation update
+
+Start with [README-LOCATION-INDEPENDENT.md](README-LOCATION-INDEPENDENT.md) for the current Home → disaster/location → real-street routing flow, phone/APK instructions, operations dashboard and verification limits. The app remains on SDK 53. Your original data-science project is retained below.
+
 # Autonomous Evacuation Intelligence (AEI) — Python AI Component
 
 > **MCA AI & Data Science project.**

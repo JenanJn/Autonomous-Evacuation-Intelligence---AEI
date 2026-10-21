@@ -1,3 +1,11 @@
+# Current mobile implementation — location-independent update
+
+Home is the entry screen, followed by disaster/location setup and the shared evacuation session. The runtime downloads actual OpenStreetMap road geometry for the user-selected position; it does not create the legacy grid. Leaflet is bundled in the mobile WebView, with downloaded street vectors for offline display. The project remains on SDK 53. A native MapLibre migration was not included.
+
+See README-LOCATION-INDEPENDENT.md for the current flow, shared operations, build instructions, test limits and implemented versus simulated features. The optional current operations console is `/operations.html`. The older standalone browser demo and its synthetic scenario are retained as legacy material.
+
+## Earlier documentation (historical context)
+
 # Evacuation UI redesign update
 
 The current native screen delegates state and navigation behavior to `mobile/src/evacuation/useEvacuation.ts`; disaster-specific visual metadata is in `presentation.ts`; native map overlays, shared UI primitives and a separate training studio live under `ui/`. A `.web.tsx` map adapter and `.web.ts` storage adapter allow browser QA of the shared mobile UI without replacing the native maps/SQLite implementation. The citizen screen uses task phases: overview, choose, preview, navigate, arrived and unavailable. Connection and save status are explicit. Full offline basemaps and background navigation remain outside the prototype. **UX-REDESIGN.md** supersedes the older UI descriptions below.

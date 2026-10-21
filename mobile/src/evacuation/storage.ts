@@ -13,6 +13,7 @@ export async function loadArea(): Promise<Area | null> {
   if (!row) return null;
   const area = JSON.parse(row.data) as Area;
   if (!area.simulated || !Array.isArray(area.nodes) || !Array.isArray(area.roads)) throw Error('Invalid offline package');
+  if(area.networkSource!=='OpenStreetMap'||!area.prepared)return null;
   return area;
 }
 export async function saveArea(area: Area) {

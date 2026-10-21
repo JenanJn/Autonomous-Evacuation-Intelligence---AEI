@@ -1,48 +1,40 @@
-# Expo SDK 57 upgrade verification — 21 October 2026
+# Location-independent mobile release validation — 21 October 2026
 
-- Expo 57.0.30, React Native 0.86.3 and React 19.2.3; matching Expo native modules and map library.
-- Clean dependency installation and offline Expo package version check: PASS.
-- TypeScript 6 project check: PASS. Replaced the removed StyleSheet.absoluteFillObject API with absoluteFill.
-- Routing, five-disaster presentation and Wi-Fi launcher tests: PASS.
-- Android Metro export: PASS, 940 modules, 18 assets, approximately 1.5 MB JavaScript.
-- Hermes compilation of the SDK 57 Android bundle: PASS (2,269,876-byte test bytecode output, excluded from source).
-- Local Expo configuration resolves with sdkVersion 57.0.0.
-- Expo Doctor: 20/21 checks passed. The online app.json schema check could not connect to the Expo API (TLS connection failure); it is not recorded as a pass.
-- Physical-phone installation, GPS and native SQLite runtime have not been verified in this upgrade session.
+The earlier UI redesign and source/backend projects are retained. This release deliberately remains on Expo SDK 53.0.27. It is not the SDK 57 upgrade that was rolled back.
 
-The launcher installs dependencies when the installed Expo version is not SDK 57 and clears Metro's cache. Use Node.js 24 LTS and Expo Go for SDK 57.
+Completed checks:
 
-## Earlier SDK 53 redesign validation (historical)
+- TypeScript project check and offline Expo native-package compatibility check: PASS.
+- Legacy routing regression tests: PASS.
+- New OSM-format network regression tests: PASS. Covers multiple geographic origins, actual supplied node/way identity, five hazard geometries, alternative-route computation, full-shelter exclusion, east/west guidance, polygon crossing, driving one-way rules, pedestrian restrictions and sparse coverage errors. Fixtures are test-only; no fixed demo city is used by the mobile runtime.
+- Presentation and Wi-Fi launcher tests: PASS.
+- Training operations API integration: PASS. A temporary database and local test server verified authentication, simultaneous capacity changes, over-capacity rejection, reopen-on-check-out, road closures, training alerts and audit entries. Test database connections close deterministically.
+- Bundled map renderer browser test: PASS. It initialises without internet or CDN scripts, displays downloaded street vectors, renders five hazard labels, bridges shelter clicks and map selection, escapes facility text and retains markers when tile requests fail. This uses an OSM-format fixture, not a live downloaded area.
+- Full mobile UI browser adapter flow: PASS. Home → demo disaster/GPS setup → parser → shelter selection → preview → navigation → transient blockage state → alternative route → full-shelter fallback → Home/resume → alternate disaster/map picker. No uncaught page errors; no horizontal page overflow at 320 pixels. A hidden duplicate navigation subtree initially confused a test locator; the test was corrected to inspect visible elements.
+- Android Metro export and Hermes compilation: PASS. JavaScript export is a build check, not an APK installation or native runtime test. The final Android export contains 879 modules and 19 assets (approximately 1.85 MB JavaScript). The web export contains 532 modules and 13 assets (approximately 1.15 MB JavaScript).
+- Web Metro export: PASS. An earlier attempt to overwrite a nested export directory hit a Windows permission error; exporting to a fresh test directory succeeded.
+- Local Expo public configuration resolves with SDK 53.0.0 and the opt-in classroom network plugin.
+- Home layout reviewed at 390 pixels. The captured Home image is from the browser adapter, not a physical phone.
 
-# Mobile redesign verification — 21 October 2026
+Important limits:
 
-Completed:
+- Live public Overpass integration could not be verified successfully here: the main service returned an upstream 502, and fallback/small probes timed out. Loading a new real area must be tested on the user's network before presenting. The app reports failures and does not substitute a generated road grid. An institution can configure its own endpoint.
+- Physical-phone GPS, native WebView, SQLite, audio/vibration, permissions, network-loss behaviour and signed APK installation have not been verified in this session.
+- The last area stores real street vectors and available geographic features. Full detailed raster-map coverage and street imagery are not downloaded. Standard OSM tile bulk downloading is not implemented.
+- Hazards, occupancy and demo destinations remain simulated. No official shelter/hazard feed, dispatch, real SMS provider or remote/background push delivery is connected.
+- Route profiles do not model every legal restriction, live traffic condition or emergency-service permission. This is not an operational evacuation service.
+- EAS APK configuration/instructions are included; no account login, project creation, signing or cloud APK build was performed.
 
-- Full TypeScript project check: PASS.
-- Mobile routing behavior tests: PASS (location anchoring, multiple shelters, segment-level hazard exclusion, blocked-road avoidance, alternative route, unreachable destination, closed/full shelter and accessibility filtering).
-- Presentation tests: PASS (five distinct disaster styles, water/flame textures, texture centers inside hazard extents, guidance and route-exclusion explanation).
-- Phone launcher tests: PASS (prefers Wi-Fi IPv4, excludes localhost and invalid link-local addresses); launcher syntax check: PASS.
-- Dependency tree: PASS. SDK 53 compatibility updates are included: Expo 53.0.27, React Native 0.79.6, constants 17.1.8, location 18.1.6, screens 4.11.1, Babel preset 13.0.0; navigation elements 2.3.8 are deduplicated.
-- Final Android Metro export: PASS, 873 modules, 1.64 MB JavaScript, 18 assets.
-- Hermes compilation of the final Android bundle: PASS, exit 0 (2,541,425-byte test bytecode output, excluded from source ZIP).
-- PNG asset decoding: PASS with Jimp. Icon/adaptive/splash images decode at 1024×1024 and favicon at 64×64. This replaces the original invalid two-byte files.
-- Shared mobile UI reviewed in a browser adapter at 390×844 and 320×640. The native app uses react-native-maps and SQLite; the browser adapter is only for UI testing.
-- Interaction checks: shelter selection → route preview → navigation; simulated road closure → new route and prominent notification; isolated destination → automatic alternative shelter with explanatory alert.
-- Fire and flood visuals inspected. The final fire preview shows the label above the extent and flame symbols inside the zone. Symbol metadata for all five disaster types is covered by presentation tests.
-- Offline readiness and schematic switch inspected. Schematic mode retained all three shelter markers and removed every OSM basemap image request from the rendered UI (0 tile images, 3 shelter markers).
-- Main action bounds checked in the 390×844 preview; Find safe shelter remained fully inside the viewport. Compact layouts use numbered markers without overlapping full-name labels; names remain in shelter cards/details.
-
-Screenshots are in previews/. These are phone-sized browser captures of the shared mobile UI, not screenshots from a physical Android phone.
-
-Not completed: native phone visual/GPS/SQLite field testing, signed APK/IPA installation, a full network-loss/cold-start test on a standalone native build, background navigation, full downloadable offline basemaps, validated real infrastructure or government security/operational certification. The current data remains synthetic.
-
-Reproduce from AEI after installing mobile dependencies:
+Reproduce from AEI:
 
 ```powershell
 cd mobile
+npm ci
 npm run type-check
 cd ..
 node demo/tests/routing.test.cjs ../../mobile/src/evacuation/engine.js
+node demo/tests/real-roads.test.cjs
 node demo/tests/presentation.test.cjs
 node demo/tests/launcher.test.cjs
+python demo/tests/test_training_operations.py
 ```
