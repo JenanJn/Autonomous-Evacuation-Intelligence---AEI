@@ -255,12 +255,3 @@ python tests/fixtures/make_synthetic_fixture.py
 Model artefacts (Milestone 2+) will be saved with their random seed,
 dataset version, and scikit-learn version recorded in a companion JSON file.
 
----
-
-## Team responsibilities
-
-| Component | Owner |
-|---|---|
-| Data pipeline, prediction model, risk engine, integration schemas | This repo |
-| GIS processing, road-network graph, route calculation, shelter allocation, dynamic replanning | Teammate |
-| React Native / Expo mobile UI | Shared (post-Milestone 3) |
